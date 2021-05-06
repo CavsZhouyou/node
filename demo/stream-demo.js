@@ -23,7 +23,7 @@ class SubReadable extends Readable {
 
 // 模拟资源池
 const dataSource = {
-    data: new Array(10000).fill('1'),
+    data: new Array(25000).fill('1'),
     // 每次读取时推送一定量数据
     makeData() {
         if (!dataSource.data.length) return null;
@@ -36,10 +36,26 @@ const dataSource = {
 
 const subReadable = new SubReadable(dataSource);
 
+let consumer = '';
+
+// subReadable.on('readable', () => {
+//     console.log(
+//         '缓存剩余数据大小: ',
+//         subReadable._readableState.length + ' byte'
+//     );
+//     console.log('------------------------------------');
+
+//     consumer += subReadable.read();
+//     console.log('消费者获取数据', consumer.length);
+// });
+
 subReadable.on('data', (chunk) => {
-console.log(
-    '缓存剩余数据大小: ',
-    subReadable._readableState.length + ' byte'
-);
-console.log('------------------------------------');
+    console.log(
+        '缓存剩余数据大小: ',
+        subReadable._readableState.length + ' byte'
+    );
+    console.log('------------------------------------');
+
+    consumer += chunk;
+    console.log('消费者获取数据', consumer.length);
 });
